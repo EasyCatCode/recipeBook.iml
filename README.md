@@ -1,10 +1,17 @@
-# Getting Started
+# Книга рецептов
 
-### Reference Documentation
+### Назначение
+Работа с сервисом рецептов
 
-For further reference, please consider the following sections:
+### Авторы
+Olga
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.0.1/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.0.1/maven-plugin/reference/html/#build-image)
+### Стек технологий
+***
+**В проекте используются**:
 
+* Backend:
+    - Java 17
+    - Maven
+    - Spring Boot
+    - Spring Web
