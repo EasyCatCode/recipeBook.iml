@@ -1,6 +1,5 @@
 package ru.sky.recipebook.model;
 
-import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
