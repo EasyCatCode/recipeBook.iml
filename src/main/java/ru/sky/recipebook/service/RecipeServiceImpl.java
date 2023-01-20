@@ -1,18 +1,19 @@
 package ru.sky.recipebook.service;
 
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.webjars.NotFoundException;
 import ru.sky.recipebook.model.Recipe;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
+
+    private final IngredientService ingredientService;
 
     private final Map<Integer, Recipe> recipeMap = new HashMap<>();
     private static Integer id = 0;
@@ -25,7 +26,31 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe getRecipe(Integer id) {
-        return recipeMap.getOrDefault(id, null);
+        if (!recipeMap.containsKey(id)) {
+            throw new NotFoundException("рецепт с заданным id Не найден");
+        }
+        return recipeMap.get(id);
+    }
+
+    @Override
+    public Collection<Recipe> getAll() {
+        return recipeMap.values();
+    }
+
+    @Override
+    public Recipe removeRecipe(int id) {
+        if (recipeMap.containsKey(id)) {
+            throw new NotFoundException("рецепт с заданным id Не найден");
+        }
+        return recipeMap.remove(id);
+    }
+
+    @Override
+    public Recipe updateRecipe(int id, Recipe recipe) {
+        if (recipeMap.containsKey(id)) {
+            throw new NotFoundException("рецепт с заданным id Не найден");
+        }
+        return recipeMap.put(id, recipe);
     }
 
 }
