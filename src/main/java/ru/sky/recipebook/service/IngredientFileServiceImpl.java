@@ -1,11 +1,14 @@
 package ru.sky.recipebook.service;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.tomcat.util.http.fileupload.MultipartStream;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.sky.recipebook.exception.FileProcessingException;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -56,7 +59,25 @@ public class IngredientFileServiceImpl implements FileService {
     }
 
     @Override
-    public File getDataFileTxt() {
+    public File getDataFile() {
         return new File(dataFilePathIngredient + "/" + dataFileNameIngredient);
+    }
+
+    @Override
+    public InputStreamResource exportFile() throws FileNotFoundException {
+        File file = getDataFile();
+        return new InputStreamResource(new FileInputStream(file));
+    }
+
+    @Override
+    public void importFile(MultipartFile file) throws FileNotFoundException {
+        cleanDataFile();
+        FileOutputStream fos = new FileOutputStream(getDataFile());
+        try {
+            IOUtils.copy(file.getInputStream(), fos);
+        } catch (IOException e) {
+            throw new FileProcessingException("Проблема сохранения файла");
+        }
+
     }
 }
