@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sky.recipebook.exception.FileProcessingException;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,11 +21,18 @@ public class IngredientFileServiceImpl implements FileService {
     @Value("${name.of.ingredient.file}")
     private String dataFileNameIngredient;
 
+    private Path path;
+
+    @PostConstruct
+    private void init() {
+        path = Path.of(dataFilePathIngredient, dataFileNameIngredient);
+    }
+
     @Override
     public boolean saveToFile(String json) {
         try {
             cleanDataFile();
-            Files.writeString(Path.of(dataFilePathIngredient, dataFileNameIngredient), json);
+            Files.writeString(path, json);
             return true;
         } catch (IOException e) {
             return false;
@@ -33,9 +41,9 @@ public class IngredientFileServiceImpl implements FileService {
 
     @Override
     public String readFromFile() {
-        if (Files.exists(Path.of(dataFilePathIngredient, dataFileNameIngredient))) {
+        if (Files.exists(path)) {
             try {
-                return Files.readString(Path.of(dataFilePathIngredient, dataFileNameIngredient));
+                return Files.readString(path);
             } catch (IOException e) {
                 throw new FileProcessingException("не удалось прочитать файл");
             }
@@ -48,7 +56,6 @@ public class IngredientFileServiceImpl implements FileService {
     @Override
     public boolean cleanDataFile() {
         try {
-            Path path = Path.of(dataFilePathIngredient, dataFileNameIngredient);
             Files.deleteIfExists(path);
             Files.createFile(path);
             return true;
@@ -78,6 +85,10 @@ public class IngredientFileServiceImpl implements FileService {
         } catch (IOException e) {
             throw new FileProcessingException("Проблема сохранения файла");
         }
+    }
 
+    @Override
+    public Path getPath() {
+        return path;
     }
 }

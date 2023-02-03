@@ -27,6 +27,7 @@ import ru.sky.recipebook.service.IngredientService;
 
 import javax.validation.Valid;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,8 +51,8 @@ public class FilesController {
         InputStreamResource inputStreamResource = ingredientFileService.exportFile();
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .contentLength(inputStreamResource.getFile().length())
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"Ingredients.Log.json\"")
+                .contentLength(Files.size(ingredientFileService.getPath()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"Ingredients.json\"")
                 .body(inputStreamResource);
     }
 
@@ -68,8 +69,8 @@ public class FilesController {
         InputStreamResource inputStreamResource = recipeFileService.exportFile();
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .contentLength(inputStreamResource.getFile().length())
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"Recipes.Log.json\"")
+                .contentLength(Files.size(ingredientFileService.getPath()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"Recipes.json\"")
                 .body(inputStreamResource);
     }
 
