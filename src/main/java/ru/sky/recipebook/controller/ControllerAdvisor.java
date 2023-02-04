@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.webjars.NotFoundException;
 import ru.sky.recipebook.exception.FileProcessingException;
 
 import java.io.FileNotFoundException;
@@ -21,7 +22,6 @@ import java.util.Map;
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
-
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -34,13 +34,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(FileNotFoundException.class)
     public String handleFileNotFoundExceptions(FileNotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public String handleotFoundExceptions(NotFoundException ex) {
         return ex.getMessage();
     }
 

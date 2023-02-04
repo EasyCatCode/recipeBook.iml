@@ -83,6 +83,7 @@ public class IngredientFileServiceImpl implements FileService {
         try {
             IOUtils.copy(file.getInputStream(), fos);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new FileProcessingException("Проблема сохранения файла");
         }
     }
