@@ -24,6 +24,7 @@ import ru.sky.recipebook.exception.FileProcessingException;
 import ru.sky.recipebook.model.Ingredient;
 import ru.sky.recipebook.service.FileService;
 import ru.sky.recipebook.service.IngredientService;
+import ru.sky.recipebook.service.RecipeService;
 
 import javax.validation.Valid;
 import java.io.*;
@@ -39,10 +40,14 @@ public class FilesController {
 
     private final FileService recipeFileService;
     private final FileService ingredientFileService;
+    private final RecipeService recipeService;
 
-    public FilesController(@Qualifier("ingredientFileService") FileService ingredientFileService, @Qualifier("recipeFileService") FileService recipeFileService) {
+    public FilesController(@Qualifier("ingredientFileService") FileService ingredientFileService,
+                           @Qualifier("recipeFileService") FileService recipeFileService,
+                           RecipeService recipeService) {
         this.recipeFileService = recipeFileService;
         this.ingredientFileService = ingredientFileService;
+        this.recipeService = recipeService;
     }
 
     @GetMapping("/ingredient/export")
@@ -65,7 +70,7 @@ public class FilesController {
 
     @GetMapping("/recipe/export")
     @Operation(description = "Экспорт файла рецептов")
-    public ResponseEntity<InputStreamResource> downloadRecipeFile() throws IOException {
+    public ResponseEntity<InputStreamResource> downloadTxtRecipeFile() throws IOException {
         InputStreamResource inputStreamResource = recipeFileService.exportFile();
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,6 +78,18 @@ public class FilesController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"Recipes.json\"")
                 .body(inputStreamResource);
     }
+
+    @GetMapping("/recipe/exporttxt")
+    @Operation(description = "Экспорт файла рецептов")
+    public ResponseEntity<InputStreamResource> downloadRecipeFile() throws IOException {
+        InputStreamResource inputStreamResource = recipeFileService.exportTxtFile(recipeService.getRecipeMap());
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_PLAIN)
+                .contentLength(Files.size(recipeFileService.getPath()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =\"AllRecipes.txt\"")
+                .body(inputStreamResource);
+    }
+
 
     @PostMapping(value = "/recipe/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(description = "Импорт файла рецептов")

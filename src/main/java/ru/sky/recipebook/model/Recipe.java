@@ -1,9 +1,6 @@
 package ru.sky.recipebook.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@ToString
 public class Recipe {
     @NotBlank
     private String name;
@@ -23,4 +21,5 @@ public class Recipe {
     private List<Ingredient> ingredients;
     @NotEmpty
     private List<String> steps;
+
 }

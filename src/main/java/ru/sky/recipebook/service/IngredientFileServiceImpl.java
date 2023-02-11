@@ -7,11 +7,13 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sky.recipebook.exception.FileProcessingException;
+import ru.sky.recipebook.model.Recipe;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 @Service("ingredientFileService")
 public class IngredientFileServiceImpl implements FileService {
@@ -74,6 +76,11 @@ public class IngredientFileServiceImpl implements FileService {
     public InputStreamResource exportFile() throws FileNotFoundException {
         File file = getDataFile();
         return new InputStreamResource(new FileInputStream(file));
+    }
+
+    @Override
+    public InputStreamResource exportTxtFile(Map<Integer, Recipe> recipeMap) throws FileNotFoundException, IOException {
+        return null;
     }
 
     @Override

@@ -29,6 +29,10 @@ public class RecipeServiceImpl implements RecipeService {
         this.fileService = fileService;
     }
 
+    public Map<Integer, Recipe> getRecipeMap() {
+        return recipeMap;
+    }
+
     @Override
     public Recipe addRecipe(Recipe recipe) {
         recipeMap.put(id++, recipe);
